@@ -1,20 +1,4 @@
-from langgraph.graph import StateGraph, START, END
-from state import ShoppingState
-from nodes.search import search_node
-
-# define state workflow
-workflow =  StateGraph(ShoppingState)
-
-# add nodes
-workflow.add_node("search", search_node)
-
-# add edges 
-workflow.add_edge(START , "search")
-workflow.add_edge("search", END)
-
-
-# compile
-app= workflow.compile()
+from graph import app
 
 # running it
 if __name__ == "__main__":

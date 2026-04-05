@@ -17,18 +17,22 @@ class EvalResult(BaseModel):
 evaluator_llm = llm.with_structured_output(EvalResult)
 
 def eval_node(state:ShoppingState):
-    if state.get("search_retries", 0) >=3:
-        return { "eval_passed":True}
+
+    retries = state.get("search_retries",0 )  #default to 0, if no retries yet
+
+    if retries >=3:
+        print("🚨 MAX RETRIES REACHED. Forcing progression to avoid infinite loop.")
+        return {"eval_passed": True, "search_retries": retries + 1}
     
-    print(model, " is evaluating the loot (scraped data )...")
+    print(model , f"is ⚖️ Evaluating scraped results (Attempt {retries + 1}/3)...")
     
-    # passing context
+    # passing context -dict comprehension
     context = f"User query : {state['query']}\nFound: { [r['title'] for r in state['search_results']]}"
 
     res = evaluator_llm.invoke(context)
 
-    print(f" >sufficieny:{res.enough}")
-    print(f"  > Reason: {res.reason}")
+    print(f" > Decision :{res.enough}")
+    print(f" > Reason: {res.reason}")
 
     # retry - LOOP if agent disapproves
 
