@@ -11,7 +11,7 @@ class ShoppingState(TypedDict):
 #     scraped_data: Annoted[list[dict]]
 #     final_report: str
 
-# class WorkerState(TypedDict):
-#     url: str
+class WorkerState(TypedDict):
+    url: str
 #     scraped_data: Annoted[list[dict], operator.add]
 
