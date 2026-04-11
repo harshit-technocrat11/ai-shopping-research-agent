@@ -19,7 +19,8 @@ def worker_node(state):
         content = soup.get_text(separator=" ", strip=True)[:4000] 
         
         # 3. Extract
-        prompt = f"Extract product name, price, and top 2 pros/cons from this text:\n\n{content}"
+        prompt = f"Extract product name, price,details and top 2 pros/cons from this text:\n\n{content} "
+    
         summary = worker_llm.invoke(prompt)
         
         return {"scraped_data": [{"url": url, "summary": summary.content}]}
