@@ -38,5 +38,6 @@ def eval_node(state:ShoppingState):
 
     return {
         "eval_passed": res.enough,
-        "query": res.suggested_query if not res.enough else state["query"]
+        "query": res.suggested_query if not res.enough else state["query"],
+        "search_retries":retries+1  #counter
     }

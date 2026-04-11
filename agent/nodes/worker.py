@@ -10,19 +10,18 @@ def worker_node(state):
     url = state['url']
     print(f"worker into action: {url}")
 
-    try :
-        #1. fetch - info
-        res= httpx.get(url, timeout=10, follow_redirects=True)
-        soup =  BeautifulSoup(res.text, "html_parser")
-
-        #2. clean / format
-        content = soup.get_text(separator=" ", strip=True)[:4000]
-
-        #3. Summary by llm 
-        prompt =  f"Extract product name, price, details, and top 3 pros and cons from this text:\n\n{content}"
-
+    try:
+        # 1. Fetch
+        res = httpx.get(url, timeout=10, follow_redirects=True)
+        soup = BeautifulSoup(res.text, "html.parser")
+        
+        # 2. Cleaning
+        content = soup.get_text(separator=" ", strip=True)[:4000] 
+        
+        # 3. Extract
+        prompt = f"Extract product name, price, and top 2 pros/cons from this text:\n\n{content}"
         summary = worker_llm.invoke(prompt)
-
+        
         return {"scraped_data": [{"url": url, "summary": summary.content}]}
         
     except Exception as e:
